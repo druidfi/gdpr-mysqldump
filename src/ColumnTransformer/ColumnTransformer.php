@@ -2,15 +2,12 @@
 
 namespace machbarmacher\GdprDump\ColumnTransformer;
 
-
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use machbarmacher\GdprDump\ColumnTransformer\Plugins\ClearColumnTransformer;
 use machbarmacher\GdprDump\ColumnTransformer\Plugins\FakerColumnTransformer;
 
 abstract class ColumnTransformer
 {
-
     const COLUMN_TRANSFORM_REQUEST = "columntransform.request";
 
     private $tableName;
@@ -30,14 +27,15 @@ abstract class ColumnTransformer
             self::$dispatcher->addListener(self::COLUMN_TRANSFORM_REQUEST,
               new ClearColumnTransformer());
         }
-
     }
 
     public static function replaceValue($tableName, $columnName, $expression)
     {
         self::setUp();
+
         $event = new ColumnTransformEvent($tableName, $columnName, $expression);
         self::$dispatcher->dispatch(self::COLUMN_TRANSFORM_REQUEST, $event);
+
         if ($event->isReplacementSet()) {
             return $event->getReplacementValue();
         }

@@ -2,7 +2,6 @@
 
 namespace machbarmacher\GdprDump\ColumnTransformer;
 
-
 use Symfony\Component\EventDispatcher\Event;
 
 class ColumnTransformEvent extends Event
@@ -10,8 +9,9 @@ class ColumnTransformEvent extends Event
     protected $table;
     protected $column;
     protected $expression;
-    protected $isReplacementSet = FALSE;
+    protected $isReplacementSet = false;
     protected $replacementValue;
+
     /**
      * ColumnTransformEvent constructor.
      */
@@ -24,7 +24,7 @@ class ColumnTransformEvent extends Event
 
     public function setReplacementValue($value)
     {
-        $this->isReplacementSet = TRUE;
+        $this->isReplacementSet = true;
         $this->replacementValue = $value;
     }
 

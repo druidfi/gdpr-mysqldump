@@ -13,7 +13,6 @@ use bomoko\MysqlCnfParser\MysqlCnfParser;
  */
 class ConfigParser
 {
-
     /** @var array */
     private $config = [];
 
@@ -28,15 +27,15 @@ class ConfigParser
     public function getFiltered($sections, $keys = null)
     {
         $result = [];
+
         foreach ($this->config as $section => $values) {
             foreach ($values as $key => $value) {
-                if (in_array($section,
-                        $sections) && (!isset($keys) || in_array($key, $keys))
-                ) {
+                if (in_array($section, $sections) && (!isset($keys) || in_array($key, $keys))) {
                     $result[$key] = $value;
                 }
             }
         }
+
         return $result;
     }
 
@@ -50,5 +49,4 @@ class ConfigParser
         $sections = MysqlCnfParser::parse($file);
         $this->config = array_replace_recursive($this->config, $sections);
     }
-
 }

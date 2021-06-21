@@ -14,7 +14,6 @@ use Symfony\Component\Console\Question\Question;
 
 class DumpCommand extends Command
 {
-
     protected function configure()
     {
         $this
@@ -126,16 +125,13 @@ class DumpCommand extends Command
      *
      * @return mixed
      */
-    public function getPasswordFromConsole(
-      InputInterface $input,
-      OutputInterface $output
-    ) {
+    public function getPasswordFromConsole(InputInterface $input, OutputInterface $output) {
         $questionHelper = $this->getHelper('question');
         $question = new Question("Enter password:");
         $question->setHidden(true);
         $question->setHiddenFallback(false);
-        $password = $questionHelper->ask($input, $output, $question);
-        return $password;
+
+        return $questionHelper->ask($input, $output, $question);
     }
 
     /**
@@ -149,20 +145,17 @@ class DumpCommand extends Command
      *
      * @return mixed|null
      */
-    public function getEffectivePassword(
-      InputInterface $input,
-      OutputInterface $output,
-      $default = null
-    ) {
+    public function getEffectivePassword(InputInterface $input, OutputInterface $output, $default = null) {
         $password = $default;
-
         $consolePasswordOption = $input->getOption('password');
-        if ($consolePasswordOption !== false) //we have a console password of some sort
-        {
-            if ($consolePasswordOption === null) //we need to ask for user input
-            {
+
+        // We have a console password of some sort
+        if ($consolePasswordOption !== false) {
+            // We need to ask for user input
+            if ($consolePasswordOption === null) {
                 $password = $this->getPasswordFromConsole($input, $output);
-            } else { //data has been passed in via the option itself
+            } else {
+                // Data has been passed in via the option itself
                 $password = $consolePasswordOption;
             }
         }
@@ -185,8 +178,8 @@ class DumpCommand extends Command
                 'db-name',
                 'db-type',
             ], null);
-        $user = $dumpSettings['user'];
 
+        $user = $dumpSettings['user'];
 
         $dumpSettings['password'] = $this->getEffectivePassword($input, $output, $dumpSettings['password']);
         $password = $dumpSettings['password'];
@@ -241,9 +234,8 @@ class DumpCommand extends Command
         $dumpSettings = array_intersect_key($dumpSettings,
             $this->getDumpSettingsDefault());
 
-        if($input->getOption('display-effective-replacements'))
-        {
-            //we simply display the gdpr-dump specific settings and exit.
+        if ($input->getOption('display-effective-replacements')) {
+            // We simply display the gdpr-dump specific settings and exit.
             $this->displayEffectiveReplacements($output, $dumpSettings);
         } else {
             $dumper = new MysqldumpGdpr($dsn, $user, $password, $dumpSettings,
@@ -273,11 +265,13 @@ class DumpCommand extends Command
         }
 
         $config = new ConfigParser();
+
         foreach ($defaultsFiles as $defaultsFile) {
             if (is_readable($defaultsFile)) {
                 $config->addFile($defaultsFile);
             }
         }
+
         return $config->getFiltered(['client', 'mysqldump']);
     }
 
@@ -289,15 +283,19 @@ class DumpCommand extends Command
         $port = $dumpSettings['port'];
         $socket = $dumpSettings['socket'];
         $dsn = "$dbType:dbname=$dbName";
+
         if ($host) {
             $dsn .= ";host=$host";
         }
+
         if ($port) {
             $dsn .= ";port=$port";
         }
+
         if ($socket) {
             $dsn .= ";unix_socket=$socket";
         }
+
         return $dsn;
     }
 
@@ -322,6 +320,7 @@ class DumpCommand extends Command
     protected function getExcludedTables(array $dumpSettings)
     {
         $excludedTables = [];
+
         if (!empty($dumpSettings['ignore-table']) && is_array($dumpSettings['ignore-table'])) {
             //mysqldump expects ignore-table values to be in the form database.tablename
             foreach ($dumpSettings['ignore-table'] as $tableName) {
@@ -330,6 +329,7 @@ class DumpCommand extends Command
                 }
             }
         }
+
         return $excludedTables;
     }
 
@@ -379,13 +379,11 @@ class DumpCommand extends Command
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param $dumpSettings
      */
-    protected function displayEffectiveReplacements(
-        OutputInterface $output,
-        $dumpSettings
-    ) {
+    protected function displayEffectiveReplacements(OutputInterface $output, $dumpSettings) {
         if (isset($dumpSettings['gdpr-expressions'])) {
             $output->writeln("gdpr-expressions=" . json_encode($dumpSettings['gdpr-expressions']));
         }
+
         if (isset($dumpSettings['gdpr-replacements'])) {
             $output->writeln("gdpr-replacements=" . json_encode($dumpSettings['gdpr-replacements']));
         }
