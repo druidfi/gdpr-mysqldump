@@ -6,7 +6,7 @@ use Symfony\Component\Console\Application;
 
 require __DIR__ . '/_bootstrap.php';
 
-$app = new Application('myapp', '1.0 (stable)');
+$app = new Application('mysqldump', '1.0.0');
 $command = new DumpCommand();
 $app->add($command);
 $app->setDefaultCommand($command->getName(), true);

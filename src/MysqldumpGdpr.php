@@ -39,6 +39,9 @@ class MysqldumpGdpr extends Mysqldump
             $this->debugSql = $dumpSettings['debug-sql'];
             unset($dumpSettings['debug-sql']);
         }
+
+        $this->setTransformTableRowHook([$this, 'hookTransformRow']);
+
         parent::__construct($dsn, $user, $pass, $dumpSettings, $pdoSettings);
     }
 
@@ -61,15 +64,18 @@ class MysqldumpGdpr extends Mysqldump
         return $columnStmt;
     }
 
-    protected function hookTransformColumnValue($tableName, $colName, $colValue)
+    protected function hookTransformRow($tableName, array $row)
     {
-        if (!empty($this->gdprReplacements[$tableName][$colName])) {
-            $replacement = ColumnTransformer::replaceValue($tableName, $colName, $this->gdprReplacements[$tableName][$colName]);
-            if($replacement !== FALSE) {
-                return $replacement;
+        foreach ($row as $colName => &$colValue) {
+            if (!empty($this->gdprReplacements[$tableName][$colName])) {
+                $replacement = ColumnTransformer::replaceValue($tableName, $colName, $this->gdprReplacements[$tableName][$colName]);
+                if($replacement !== FALSE) {
+                    $colValue = $replacement;
+                }
             }
         }
-        return $colValue;
+
+        return $row;
     }
 
 }
