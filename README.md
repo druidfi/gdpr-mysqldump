@@ -45,7 +45,7 @@ INSERT INTO `users_field_data` VALUES (1,'en','en',NULL,'admin','$S$Eb6kZl.9OFjo
 
 ### Using gdpr-replacements
 
-This uses [Faker](https://packagist.org/packages/fzaninotto/faker) for most of the column sanitization.
+This uses [Faker](https://fakerphp.github.io/) for most of the column sanitization.
 
 Presently, the tool searches for the "gdpr-replacements" option, either passed as a command line argument, or as part of a [MySql options file](https://dev.mysql.com/doc/refman/8.0/en/option-files.html).
 
@@ -57,7 +57,6 @@ The "gdpr-replacements" option expects a JSON string with the following format
 Where *formatterType* is one of the following
 * **name** - generates a name
 * **phoneNumber** - generates a phone number
-* **username** - generates a random user name
 * **password** - generates a random password
 * **email** - generates a random email address
 * **date** - generates a date
