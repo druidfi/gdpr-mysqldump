@@ -1,5 +1,7 @@
 # GDPR Dump
 
+A fork of [machbarmacher/gdpr-dump](https://github.com/machbarmacher/gdpr-dump)
+
 A drop-in replacement for mysqldump that optionally sanitizes DB fields for better GDPR conformity.
 
 It is based on the [ifsnop/mysqldump\-php](https://github.com/ifsnop/mysqldump-php) library, 
@@ -108,3 +110,7 @@ Here we might need better options.
 ## Contributors notes
 
 * Note that the project follows [PSR-2](https://www.php-fig.org/psr/psr-2/) for formatting. 
+
+## Other information
+
+This project can be found from the Packagist: https://packagist.org/packages/druidfi/gdpr-mysqldump
