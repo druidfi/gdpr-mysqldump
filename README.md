@@ -57,6 +57,7 @@ The "gdpr-replacements" option expects a JSON string with the following format
 Where *formatterType* is one of the following
 * **name** - generates a name
 * **phoneNumber** - generates a phone number
+* **userName** - generates a random user name
 * **password** - generates a random password
 * **email** - generates a random email address
 * **date** - generates a date
@@ -73,6 +74,8 @@ You can also save replacements mapping to JSON file and use it with `--gdpr-repl
 
 ## Use with drush
 
+See [drush-gdpr-dumper](https://github.com/druidfi/drush-gdpr-dumper)
+
 As this mimicks mysqldump, it can be use with drush, backup_migrate and any tool that uses mysqldump.
 Drush example:
 
@@ -85,7 +88,7 @@ $ drush sql-dump --tables-list=users_field_data --extra-dump=$'--gdpr-expression
 
 ### MySqlOptions file
 
-You are able to have your gdpr-expressions/replacement options set in a mysql options file file.
+You are able to have your gdpr-expressions/replacement options set in a mysql options file.
 It is to appear under the `[mysqldump]` section.
 
 So, for example, you might have `/etc/my.cnf` with the following content
