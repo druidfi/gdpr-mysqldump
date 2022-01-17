@@ -13,18 +13,14 @@ use bomoko\MysqlCnfParser\MysqlCnfParser;
  */
 class ConfigParser
 {
-    /** @var array */
-    private $config = [];
+    private array $config = [];
 
-    /**
-     * @return array
-     */
-    public function getConfig()
+    public function getConfig(): array
     {
         return $this->config;
     }
 
-    public function getFiltered($sections, $keys = null)
+    public function getFiltered($sections, $keys = null): array
     {
         $result = [];
 
@@ -41,10 +37,8 @@ class ConfigParser
 
     /**
      * Takes a .cnf file and adds its configuration settings to internal state
-     *
-     * @param $file
      */
-    public function addFile($file)
+    public function addFile(string $file): void
     {
         $sections = MysqlCnfParser::parse($file);
         $this->config = array_replace_recursive($this->config, $sections);

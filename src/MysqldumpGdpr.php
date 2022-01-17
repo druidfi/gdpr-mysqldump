@@ -13,8 +13,7 @@ class MysqldumpGdpr extends Mysqldump
     /** @var [string][string]string */
     protected $gdprReplacements;
 
-    /** @var bool */
-    protected $debugSql;
+    protected bool $debugSql;
 
     public function __construct($dsn = '', $user = '', $pass = '', array $dumpSettings = [], array $pdoSettings = [])
     {
@@ -38,7 +37,7 @@ class MysqldumpGdpr extends Mysqldump
         parent::__construct($dsn, $user, $pass, $dumpSettings, $pdoSettings);
     }
 
-    public function getColumnStmt($tableName)
+    public function getColumnStmt($tableName): array
     {
         $columnStmt = parent::getColumnStmt($tableName);
 
@@ -60,7 +59,7 @@ class MysqldumpGdpr extends Mysqldump
         return $columnStmt;
     }
 
-    protected function hookTransformRow($tableName, array $row)
+    protected function hookTransformRow($tableName, array $row): array
     {
         foreach ($row as $colName => &$colValue) {
             if (!empty($this->gdprReplacements[$tableName][$colName])) {

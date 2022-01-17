@@ -5,6 +5,7 @@ namespace machbarmacher\GdprDump\Command;
 use Ifsnop\Mysqldump\Mysqldump;
 use machbarmacher\GdprDump\ConfigParser;
 use machbarmacher\GdprDump\MysqldumpGdpr;
+use PDO;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -119,13 +120,8 @@ class DumpCommand extends Command
                 'Implies --add-drop-table --add-locks --disable-keys --extended-insert --hex-blob --no-autocommit --single-transaction.');
     }
 
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return mixed
-     */
-    public function getPasswordFromConsole(InputInterface $input, OutputInterface $output) {
+    public function getPasswordFromConsole(InputInterface $input, OutputInterface $output)
+    {
         $questionHelper = $this->getHelper('question');
         $question = new Question("Enter password:");
         $question->setHidden(true);
@@ -138,14 +134,9 @@ class DumpCommand extends Command
      * Given the state of the console options, this function will determine
      * whether to use either the command line password itself, ask a user to
      * enter a password or fallback on the default passed in.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param null $default
-     *
-     * @return mixed|null
      */
-    public function getEffectivePassword(InputInterface $input, OutputInterface $output, $default = null) {
+    public function getEffectivePassword(InputInterface $input, OutputInterface $output, $default = null)
+    {
         $password = $default;
         $consolePasswordOption = $input->getOption('password');
 
@@ -222,7 +213,7 @@ class DumpCommand extends Command
                 throw new \UnexpectedValueException(sprintf('Option compress is not available for db type %s',
                     $dumpSettings['db-type']));
             }
-            $pdoSettings[] = \PDO::MYSQL_ATTR_COMPRESS;
+            $pdoSettings[] = PDO::MYSQL_ATTR_COMPRESS;
             unset($dumpSettings['compress']);
         }
 
@@ -244,7 +235,7 @@ class DumpCommand extends Command
         }
     }
 
-    protected function getDefaults($extraFile)
+    protected function getDefaults($extraFile): array
     {
         $defaultsFiles[] = '/etc/my.cnf';
         $defaultsFiles[] = '/etc/mysql/my.cnf';
@@ -275,7 +266,7 @@ class DumpCommand extends Command
         return $config->getFiltered(['client', 'mysqldump']);
     }
 
-    protected function getDsn(array $dumpSettings)
+    protected function getDsn(array $dumpSettings): string
     {
         $dbName = $dumpSettings['db-name'];
         $dbType = $dumpSettings['db-type'];
@@ -299,7 +290,7 @@ class DumpCommand extends Command
         return $dsn;
     }
 
-    protected function getOptOptions($switch)
+    protected function getOptOptions($switch): array
     {
         return !$switch ? [] : [
             'add-drop-table' => true,
@@ -317,7 +308,7 @@ class DumpCommand extends Command
         ];
     }
 
-    protected function getExcludedTables(array $dumpSettings)
+    protected function getExcludedTables(array $dumpSettings): array
     {
         $excludedTables = [];
 
@@ -333,7 +324,7 @@ class DumpCommand extends Command
         return $excludedTables;
     }
 
-    protected function getDumpSettingsDefault()
+    protected function getDumpSettingsDefault(): array
     {
         // Literal copy from \Ifsnop\Mysqldump\Mysqldump::__construct
         return [
@@ -375,11 +366,8 @@ class DumpCommand extends Command
             ];
     }
 
-    /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param $dumpSettings
-     */
-    protected function displayEffectiveReplacements(OutputInterface $output, $dumpSettings) {
+    protected function displayEffectiveReplacements(OutputInterface $output, $dumpSettings)
+    {
         if (isset($dumpSettings['gdpr-expressions'])) {
             $output->writeln("gdpr-expressions=" . json_encode($dumpSettings['gdpr-expressions']));
         }

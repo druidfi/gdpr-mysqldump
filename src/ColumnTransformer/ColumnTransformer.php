@@ -10,12 +10,7 @@ abstract class ColumnTransformer
 {
     const COLUMN_TRANSFORM_REQUEST = "columntransform.request";
 
-    private $tableName;
-
-    private $columnName;
-
     protected static $dispatcher;
-
 
     public static function setUp()
     {
@@ -34,7 +29,8 @@ abstract class ColumnTransformer
         self::setUp();
 
         $event = new ColumnTransformEvent($tableName, $columnName, $expression);
-        self::$dispatcher->dispatch(self::COLUMN_TRANSFORM_REQUEST, $event);
+
+        self::$dispatcher->dispatch($event, self::COLUMN_TRANSFORM_REQUEST);
 
         if ($event->isReplacementSet()) {
             return $event->getReplacementValue();
@@ -45,13 +41,12 @@ abstract class ColumnTransformer
 
     public function __invoke(ColumnTransformEvent $event)
     {
-        if (in_array(($event->getExpression())['formatter'],
-          $this->getSupportedFormatters())) {
+        if (in_array(($event->getExpression())['formatter'], $this->getSupportedFormatters())) {
             $event->setReplacementValue($this->getValue($event->getExpression()));
         }
     }
 
-    abstract public function getValue($expression);
+    abstract public function getValue($expression): string;
 
     abstract protected function getSupportedFormatters();
 }

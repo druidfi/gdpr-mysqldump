@@ -21,7 +21,7 @@ unset($file);
 if (!defined('APP_COMPOSER_AUTOLOAD')) {
     fwrite(STDERR,
       'You need to set up the project dependencies using the following commands:' . PHP_EOL .
-      'wget http://getcomposer.org/composer.phar' . PHP_EOL .
+      'wget https://getcomposer.org/composer.phar' . PHP_EOL .
       'php composer.phar install' . PHP_EOL
     );
     die(1);
