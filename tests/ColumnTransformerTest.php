@@ -2,12 +2,15 @@
 
 use machbarmacher\GdprDump\ColumnTransformer\ColumnTransformer;
 
-use \PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ColumnTransformerTest extends TestCase
 {
-    private $jsonData = '{"users_field_data":{"name":"uid","mail":{"formatter":"clear"},"init":"uid","pass":{"transformer":"faker", "formatter":"password"}}}';
+    private string $jsonData = '{"users_field_data":{"name":"uid","mail":{"formatter":"clear"},"init":"uid","pass":{"transformer":"faker", "formatter":"password"}}}';
 
+    /**
+     * @covers ColumnTransformer::replaceValue
+     */
     public function testCreatingNewFakerStatement()
     {
         $gdprExpressions = json_decode($this->jsonData, TRUE);
@@ -17,6 +20,9 @@ class ColumnTransformerTest extends TestCase
         $this->assertTrue(is_string($result));
     }
 
+    /**
+     * @covers ColumnTransformer::replaceValue
+     */
     public function testCreatingNewClearStatement()
     {
         $gdprExpressions = json_decode($this->jsonData, TRUE);
