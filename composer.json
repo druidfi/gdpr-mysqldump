@@ -13,12 +13,17 @@
     }
   ],
   "require": {
-    "symfony/console": "^3.0|^4.0|^5.0",
-    "ifsnop/mysqldump-php": "^2.9",
-    "cweagans/composer-patches": "^1.7",
+    "php": "^7.4 || ^8.0",
+    "ext-json": "*",
     "bomoko/mysql-cnf-parser": "dev-master",
-    "fakerphp/faker": "^1.14",
-    "symfony/event-dispatcher": "^3.0|^4.0|^5.0"
+    "cweagans/composer-patches": "^1.7",
+    "fakerphp/faker": "^1.17",
+    "ifsnop/mysqldump-php": "^2.9",
+    "symfony/console": "^4.4.25|^5.0|^6.0",
+    "symfony/event-dispatcher": "^4.4.25|^5.0|^6.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.5.15 || ^9"
   },
   "bin": [
     "mysqldump"
@@ -37,7 +42,9 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "require-dev": {
-    "phpunit/phpunit": "^7.2"
+  "config": {
+    "allow-plugins": {
+      "cweagans/composer-patches": true
+    }
   }
 }
