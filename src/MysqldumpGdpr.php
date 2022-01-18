@@ -8,12 +8,12 @@ use machbarmacher\GdprDump\ColumnTransformer\ColumnTransformer;
 class MysqldumpGdpr extends Mysqldump
 {
     /** @var [string][string]string */
-    protected $gdprExpressions;
+    protected array $gdprExpressions = [];
 
     /** @var [string][string]string */
-    protected $gdprReplacements;
+    protected array $gdprReplacements = [];
 
-    protected bool $debugSql;
+    protected bool $debugSql = false;
 
     public function __construct($dsn = '', $user = '', $pass = '', array $dumpSettings = [], array $pdoSettings = [])
     {
