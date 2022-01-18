@@ -7,10 +7,10 @@ use machbarmacher\GdprDump\ColumnTransformer\ColumnTransformer;
 
 class MysqldumpGdpr extends Mysqldump
 {
-    /** @var [string][string]string */
+    /** @var array [string][string]string */
     protected array $gdprExpressions = [];
 
-    /** @var [string][string]string */
+    /** @var array [string][string]string */
     protected array $gdprReplacements = [];
 
     protected bool $debugSql = false;
