@@ -3,9 +3,6 @@ name: Run tests
 on:
   pull_request:
 
-env:
-  PHP_VERSION: '8.0'
-
 jobs:
 
   tests:

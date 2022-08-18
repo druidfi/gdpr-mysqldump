@@ -3,8 +3,8 @@
 namespace druidfi\GdprDump;
 
 use Nette\Utils\Finder;
-use Webmozart\PathUtil\Path;
 use Matomo\Ini\IniReader;
+use Symfony\Component\Filesystem\Path;
 
 class MysqlCnfParser
 {
