@@ -2,14 +2,12 @@
 
 namespace druidfi\GdprDump;
 
-use Nette\Utils\Finder;
 use Matomo\Ini\IniReader;
 use Symfony\Component\Filesystem\Path;
 
 class MysqlCnfParser
 {
-    const FILE_TYPES = ['*.cnf', '*.ini'];
-
+    protected array $extensions = ['cnf', 'ini'];
     protected array $processedFiles = [];
 
     public static function parse($filename): array
@@ -72,9 +70,15 @@ class MysqlCnfParser
     protected function parseDirectory($directoryName): array
     {
         $return = [];
+        $files = [];
 
-        foreach (Finder::findFiles(self::FILE_TYPES)->in($directoryName) as $key => $file) {
-            $return = array_merge_recursive($return, $this->parseIniFile($key));
+        foreach ($this->extensions as $extension) {
+            $glob = sprintf('%s/*.%s', $directoryName, $extension);
+            $files = array_merge($files, glob($glob));
+        }
+
+        foreach ($files as $file) {
+            $return = array_merge_recursive($return, $this->parseIniFile($file));
         }
 
         return $return;

@@ -24,7 +24,6 @@
     "fakerphp/faker": "^1.20",
     "ifsnop/mysqldump-php": "^2.9",
     "matomo/ini": "^3.0",
-    "nette/finder": "^2.5 || ^3.0@dev",
     "symfony/console": "^4.4.25|^5.0|^6.0",
     "symfony/event-dispatcher": "^4.4.25|^5.0|^6.0",
     "symfony/filesystem": "^5.4 || ^6.0"
