@@ -23,24 +23,25 @@ class MysqlCnfParser
             $this->markFileProcessed($filename);
             $contents = file_get_contents($filename);
             $contentArray = explode("\n", $contents);
-            //go through the file and pop any "!include/!includedir" directives
+
+            // Go through the file and pop any "!include/!includedir" directives
             $reader = new IniReader();
             $toParse = [];
             $includes = [];
+
             foreach ($contentArray as $line) {
                 if (strpos(trim($line), "!include") === 0) {
                     $includes[] = $line;
-                } elseif (strlen($line) > 0 && !in_array($line[0],
-                        ["!", "#"])
-                ) { //ignore comments
+                } elseif (strlen($line) > 0 && !in_array($line[0], ["!", "#"])) {
+                    // Ignore comments
                     $toParse[] = $line;
                 }
             }
 
             return array_merge_recursive(
-                $reader->readString(implode("\n", $toParse), true),
-                $this->processIncludes($includes,
-                    Path::getDirectory($filename)));
+                $reader->readString(implode("\n", $toParse)),
+                $this->processIncludes($includes, Path::getDirectory($filename))
+            );
         } else {
             return [];
         }
@@ -51,18 +52,20 @@ class MysqlCnfParser
         $return = [];
 
         foreach ($includes as $include) {
-            //strip any !include(s)
+            // Strip any !include(s).
             $names = explode(" ", $include);
             $fileName = $names[1];
             $includeType = $names[0];
-
             $fileName = Path::makeAbsolute($fileName, $includePath);
+
             if (!$this->hasFileBeenProcessed($fileName)) {
                 $this->markFileProcessed($fileName);
                 $return = array_merge_recursive($return,
-                    $includeType == "!includedir" ? $this->parseDirectory($fileName) : $this->parseIniFile($fileName));
+                    $includeType == "!includedir" ? $this->parseDirectory($fileName) : $this->parseIniFile($fileName)
+                );
             }
         }
+
         return $return;
     }
 
@@ -70,8 +73,7 @@ class MysqlCnfParser
     {
         $return = [];
 
-        foreach (Finder::findFiles(self::FILE_TYPES)
-                     ->in($directoryName) as $key => $file) {
+        foreach (Finder::findFiles(self::FILE_TYPES)->in($directoryName) as $key => $file) {
             $return = array_merge_recursive($return, $this->parseIniFile($key));
         }
 
