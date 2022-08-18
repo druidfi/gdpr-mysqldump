@@ -74,7 +74,7 @@ This will replace the given column's value with Faker output.
 
 You can also save replacements mapping to JSON file and use it with `--gdpr-replacements-file` option.
 
-## Use with drush
+## Use with Drush
 
 See [drush-gdpr-dumper](https://github.com/druidfi/drush-gdpr-dumper)
 
@@ -110,6 +110,12 @@ Here we might need better options.
 ## Contributors notes
 
 * Note that the project follows [PSR-2](https://www.php-fig.org/psr/psr-2/) for formatting. 
+
+## Credits
+
+- [machbarmacher/gdpr-dump](https://github.com/machbarmacher/gdpr-dump)
+- [ifsnop/mysqldump-php](https://github.com/ifsnop/mysqldump-php)
+- [Faker](https://fakerphp.github.io/)
 
 ## Other information
 
