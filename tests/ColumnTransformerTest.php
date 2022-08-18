@@ -1,6 +1,6 @@
 <?php
 
-use machbarmacher\GdprDump\ColumnTransformer\ColumnTransformer;
+use druidfi\GdprDump\ColumnTransformer\ColumnTransformer;
 
 use PHPUnit\Framework\TestCase;
 

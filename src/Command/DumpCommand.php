@@ -1,10 +1,10 @@
 <?php
 
-namespace machbarmacher\GdprDump\Command;
+namespace druidfi\GdprDump\Command;
 
 use Ifsnop\Mysqldump\Mysqldump;
-use machbarmacher\GdprDump\ConfigParser;
-use machbarmacher\GdprDump\MysqldumpGdpr;
+use druidfi\GdprDump\ConfigParser;
+use druidfi\GdprDump\MysqldumpGdpr;
 use PDO;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

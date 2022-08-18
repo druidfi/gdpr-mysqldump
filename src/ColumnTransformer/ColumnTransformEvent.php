@@ -1,6 +1,6 @@
 <?php
 
-namespace machbarmacher\GdprDump\ColumnTransformer;
+namespace druidfi\GdprDump\ColumnTransformer;
 
 use Symfony\Contracts\EventDispatcher\Event;
 

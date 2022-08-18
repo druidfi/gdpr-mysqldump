@@ -1,10 +1,10 @@
 <?php
 
-namespace machbarmacher\GdprDump\ColumnTransformer\Plugins;
+namespace druidfi\GdprDump\ColumnTransformer\Plugins;
 
 use Faker\Factory;
 use Faker\Generator;
-use machbarmacher\GdprDump\ColumnTransformer\ColumnTransformer;
+use druidfi\GdprDump\ColumnTransformer\ColumnTransformer;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
