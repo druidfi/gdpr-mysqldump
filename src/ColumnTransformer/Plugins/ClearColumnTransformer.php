@@ -1,8 +1,8 @@
 <?php
 
-namespace machbarmacher\GdprDump\ColumnTransformer\Plugins;
+namespace druidfi\GdprDump\ColumnTransformer\Plugins;
 
-use machbarmacher\GdprDump\ColumnTransformer\ColumnTransformer;
+use druidfi\GdprDump\ColumnTransformer\ColumnTransformer;
 
 class ClearColumnTransformer extends ColumnTransformer
 {

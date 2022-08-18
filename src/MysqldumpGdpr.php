@@ -1,9 +1,9 @@
 <?php
 
-namespace machbarmacher\GdprDump;
+namespace druidfi\GdprDump;
 
 use Ifsnop\Mysqldump\Mysqldump;
-use machbarmacher\GdprDump\ColumnTransformer\ColumnTransformer;
+use druidfi\GdprDump\ColumnTransformer\ColumnTransformer;
 
 class MysqldumpGdpr extends Mysqldump
 {

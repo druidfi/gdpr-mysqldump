@@ -1,10 +1,10 @@
 <?php
 
-namespace machbarmacher\GdprDump\ColumnTransformer;
+namespace druidfi\GdprDump\ColumnTransformer;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use machbarmacher\GdprDump\ColumnTransformer\Plugins\ClearColumnTransformer;
-use machbarmacher\GdprDump\ColumnTransformer\Plugins\FakerColumnTransformer;
+use druidfi\GdprDump\ColumnTransformer\Plugins\ClearColumnTransformer;
+use druidfi\GdprDump\ColumnTransformer\Plugins\FakerColumnTransformer;
 
 abstract class ColumnTransformer
 {

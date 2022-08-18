@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use machbarmacher\GdprDump\Command\DumpCommand;
+use druidfi\GdprDump\Command\DumpCommand;
 use Symfony\Component\Console\Application;
 
 require __DIR__ . '/_bootstrap.php';

@@ -1,6 +1,6 @@
 <?php
 
-namespace machbarmacher\GdprDump;
+namespace druidfi\GdprDump;
 
 use bomoko\MysqlCnfParser\MysqlCnfParser;
 
@@ -9,7 +9,7 @@ use bomoko\MysqlCnfParser\MysqlCnfParser;
  *
  * Parses key/value lines from mysql .cnf files.
  *
- * @package machbarmacher\GdprDump
+ * @package druidfi\GdprDump
  */
 class ConfigParser
 {
