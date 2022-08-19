@@ -2,8 +2,6 @@
 
 namespace druidfi\GdprDump;
 
-use bomoko\MysqlCnfParser\MysqlCnfParser;
-
 /**
  * Class ConfParser
  *

@@ -10,16 +10,19 @@
     {
       "name": "Axel Rutz",
       "email": "axel.rutz@machbarmacher.net"
+    },
+    {
+      "name": "Bomoko",
+      "email": "blaize.kaye@gmail.com"
     }
   ],
   "require": {
     "php": "^7.4 || ^8.0",
     "ext-json": "*",
     "ext-pdo": "*",
-    "bomoko/mysql-cnf-parser": "dev-master",
-    "cweagans/composer-patches": "^1.7",
+    "druidfi/mysqldump-php": "^1.0.0",
     "fakerphp/faker": "^1.20",
-    "ifsnop/mysqldump-php": "^2.9",
+    "matomo/ini": "^3.0",
     "symfony/console": "^4.4.25|^5.0|^6.0",
     "symfony/event-dispatcher": "^4.4.25|^5.0|^6.0"
   },
@@ -34,18 +37,9 @@
       "druidfi\\GdprDump\\": "src/"
     }
   },
-  "extra": {
-    "patches": {
-      "ifsnop/mysqldump-php": {
-        "Add getter": "https://patch-diff.githubusercontent.com/raw/ifsnop/mysqldump-php/pull/137.patch"
-      }
-    }
-  },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
-    "allow-plugins": {
-      "cweagans/composer-patches": true
-    }
+    "sort-packages": true
   }
 }
