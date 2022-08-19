@@ -111,6 +111,12 @@ Here we might need better options.
 
 * Note that the project follows [PSR-2](https://www.php-fig.org/psr/psr-2/) for formatting. 
 
+## TODO
+
+Class `\druidfi\GdprDump\Util\Path` class is copied from `symfony/filesystem:5.4.0` package. When the package
+`drupal/core-dev-pinned` will allow `symfony/filesystem` newer then 5.4 we can remove this class and use
+`symfony/filesystem` instead.
+
 ## Credits
 
 - [machbarmacher/gdpr-dump](https://github.com/machbarmacher/gdpr-dump)

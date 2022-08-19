@@ -3,7 +3,7 @@
 namespace druidfi\GdprDump;
 
 use Matomo\Ini\IniReader;
-use Symfony\Component\Filesystem\Path;
+use druidfi\GdprDump\Util\Path;
 
 class MysqlCnfParser
 {
