@@ -20,9 +20,8 @@
     "php": "^7.4 || ^8.0",
     "ext-json": "*",
     "ext-pdo": "*",
-    "cweagans/composer-patches": "^1.7",
+    "druidfi/mysqldump-php": "dev-code-refactor",
     "fakerphp/faker": "^1.20",
-    "ifsnop/mysqldump-php": "dev-master",
     "matomo/ini": "^3.0",
     "symfony/console": "^4.4.25|^5.0|^6.0",
     "symfony/event-dispatcher": "^4.4.25|^5.0|^6.0",
@@ -39,18 +38,9 @@
       "druidfi\\GdprDump\\": "src/"
     }
   },
-  "extra": {
-    "patches": {
-      "ifsnop/mysqldump-php": {
-        "Add getter": "https://patch-diff.githubusercontent.com/raw/ifsnop/mysqldump-php/pull/137.patch"
-      }
-    }
-  },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
-    "allow-plugins": {
-      "cweagans/composer-patches": true
-    }
+    "sort-packages": true
   }
 }
