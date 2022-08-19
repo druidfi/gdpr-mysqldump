@@ -20,7 +20,7 @@
     "php": "^7.4 || ^8.0",
     "ext-json": "*",
     "ext-pdo": "*",
-    "druidfi/mysqldump-php": "dev-code-refactor",
+    "druidfi/mysqldump-php": "^1.0.0",
     "fakerphp/faker": "^1.20",
     "matomo/ini": "^3.0",
     "symfony/console": "^4.4.25|^5.0|^6.0",
