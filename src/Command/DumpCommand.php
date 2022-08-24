@@ -276,24 +276,24 @@ class DumpCommand extends Command
      */
     protected function getDsn(array $dumpSettings): string
     {
-        $dsn = sprintf('%s:', $dumpSettings['db-type']);
+        $elements = [];
 
         if ($dumpSettings['host']) {
-            $dsn .= sprintf(';host=%s', $dumpSettings['host']);
+            $elements[] = sprintf('host=%s', $dumpSettings['host']);
 
             if ($dumpSettings['port']) {
-                $dsn .= sprintf(';port=%s', $dumpSettings['port']);
+                $elements[] = sprintf('port=%s', $dumpSettings['port']);
             }
         }
         else if ($dumpSettings['socket']) {
-            $dsn .= sprintf(";unix_socket=%s", $dumpSettings['socket']);
+            $elements[] = sprintf('unix_socket=%s', $dumpSettings['socket']);
         }
 
         if ($dumpSettings['db-name']) {
-            $dsn .= sprintf(';dbname=%s', $dumpSettings['db-name']);
+            $elements[] = sprintf('dbname=%s', $dumpSettings['db-name']);
         }
 
-        return $dsn;
+        return sprintf('%s:%s', $dumpSettings['db-type'], join(';', $elements));
     }
 
     protected function getOptOptions($switch): array
