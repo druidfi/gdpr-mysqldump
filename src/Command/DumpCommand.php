@@ -2,7 +2,8 @@
 
 namespace druidfi\GdprDump\Command;
 
-use Ifsnop\Mysqldump\Mysqldump;
+use Druidfi\Mysqldump\Compress\CompressManagerFactory;
+use Druidfi\Mysqldump\DumpSettings;
 use druidfi\GdprDump\ConfigParser;
 use druidfi\GdprDump\MysqldumpGdpr;
 use PDO;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use UnexpectedValueException;
 
 class DumpCommand extends Command
 {
@@ -48,7 +50,7 @@ class DumpCommand extends Command
             ->addOption('defaults-file', null, InputOption::VALUE_OPTIONAL,
                 'An additional my.cnf file.')
             ->addOption('compress-result-file', null, InputOption::VALUE_OPTIONAL,
-                'Compress resulting file, available Options: Gzip, Bzip2. Defaults to None.', 'None')
+                'Compress resulting file, available Options: Gzip, Bzip2. Defaults to None.', CompressManagerFactory::NONE)
             ->addOption('compress', 'C', InputOption::VALUE_NONE,
                 'Compress all information sent between the client and the server if both support compression.')
             ->addOption('init_commands', null,
@@ -70,7 +72,7 @@ class DumpCommand extends Command
                 'Use complete INSERT statements that include column names.')
             ->addOption('default-character-set', null,
                 InputOption::VALUE_OPTIONAL,
-                'Default charset. Defaults to utf8mb4.', 'utf8mb4')
+                'Default charset. Defaults to utf8mb4.', DumpSettings::UTF8MB4)
             ->addOption('disable-keys', null, InputOption::VALUE_NONE,
                 'Adds disable-keys statements for faster dump execution. Defaults to on, use no-disable-keys to switch off.')
             ->addOption('extended-insert', 'e', InputOption::VALUE_NONE,
@@ -183,7 +185,7 @@ class DumpCommand extends Command
             $dumpSettings['gdpr-expressions'] = json_decode($dumpSettings['gdpr-expressions'],
                 true);
             if (json_last_error()) {
-                throw new \UnexpectedValueException(sprintf('Invalid gdpr-expressions json (%s): %s',
+                throw new UnexpectedValueException(sprintf('Invalid gdpr-expressions json (%s): %s',
                     json_last_error_msg(), $dumpSettings['gdpr-expressions']));
             }
         }
@@ -192,7 +194,7 @@ class DumpCommand extends Command
             $dumpSettings['gdpr-replacements'] = json_decode($dumpSettings['gdpr-replacements'],
                 true);
             if (json_last_error()) {
-                throw new \UnexpectedValueException(sprintf('Invalid gdpr-replacements json (%s): %s',
+                throw new UnexpectedValueException(sprintf('Invalid gdpr-replacements json (%s): %s',
                     json_last_error_msg(), $dumpSettings['gdpr-replacements']));
             }
         }
@@ -201,7 +203,7 @@ class DumpCommand extends Command
             $dumpSettings['gdpr-replacements'] = json_decode(file_get_contents($dumpSettings['gdpr-replacements-file']),
                 true);
             if (json_last_error()) {
-                throw new \UnexpectedValueException(sprintf('Invalid gdpr-replacements json (%s): %s',
+                throw new UnexpectedValueException(sprintf('Invalid gdpr-replacements json (%s): %s',
                     json_last_error_msg(), $dumpSettings['gdpr-replacements']));
             }
         }
@@ -210,7 +212,7 @@ class DumpCommand extends Command
 
         if (!empty($dumpSettings['compress'])) {
             if ($dumpSettings['db-type'] !== 'mysql') {
-                throw new \UnexpectedValueException(sprintf('Option compress is not available for db type %s',
+                throw new UnexpectedValueException(sprintf('Option compress is not available for db type %s',
                     $dumpSettings['db-type']));
             }
             $pdoSettings[] = PDO::MYSQL_ATTR_COMPRESS;
@@ -222,15 +224,14 @@ class DumpCommand extends Command
             $dumpSettings['compress'] = $dumpSettings['compress-result-file'];
         }
 
-        $dumpSettings = array_intersect_key($dumpSettings,
-            $this->getDumpSettingsDefault());
+        // Get only settings which are found from the defaults
+        $dumpSettings = array_intersect_key($dumpSettings, $this->getValidDumpSettings());
 
         if ($input->getOption('display-effective-replacements')) {
             // We simply display the gdpr-dump specific settings and exit.
             $this->displayEffectiveReplacements($output, $dumpSettings);
         } else {
-            $dumper = new MysqldumpGdpr($dsn, $user, $password, $dumpSettings,
-                $pdoSettings);
+            $dumper = new MysqldumpGdpr($dsn, $user, $password, $dumpSettings, $pdoSettings);
             $dumper->start($input->getOption('result-file'));
         }
     }
@@ -266,25 +267,30 @@ class DumpCommand extends Command
         return $config->getFiltered(['client', 'mysqldump']);
     }
 
+    /**
+     * Valid examples:
+     *
+     * mysql:host=localhost;dbname=testdb
+     * mysql:host=localhost;port=3307;dbname=testdb
+     * mysql:unix_socket=/tmp/mysql.sock;dbname=testdb
+     */
     protected function getDsn(array $dumpSettings): string
     {
-        $dbName = $dumpSettings['db-name'];
-        $dbType = $dumpSettings['db-type'];
-        $host = $dumpSettings['host'];
-        $port = $dumpSettings['port'];
-        $socket = $dumpSettings['socket'];
-        $dsn = "$dbType:dbname=$dbName";
+        $dsn = sprintf('%s:', $dumpSettings['db-type']);
 
-        if ($host) {
-            $dsn .= ";host=$host";
+        if ($dumpSettings['host']) {
+            $dsn .= sprintf(';host=%s', $dumpSettings['host']);
+
+            if ($dumpSettings['port']) {
+                $dsn .= sprintf(';port=%s', $dumpSettings['port']);
+            }
+        }
+        else if ($dumpSettings['socket']) {
+            $dsn .= sprintf(";unix_socket=%s", $dumpSettings['socket']);
         }
 
-        if ($port) {
-            $dsn .= ";port=$port";
-        }
-
-        if ($socket) {
-            $dsn .= ";unix_socket=$socket";
+        if ($dumpSettings['db-name']) {
+            $dsn .= sprintf(';dbname=%s', $dumpSettings['db-name']);
         }
 
         return $dsn;
@@ -313,7 +319,7 @@ class DumpCommand extends Command
         $excludedTables = [];
 
         if (!empty($dumpSettings['ignore-table']) && is_array($dumpSettings['ignore-table'])) {
-            //mysqldump expects ignore-table values to be in the form database.tablename
+            // mysqldump expects ignore-table values to be in the form database.tablename
             foreach ($dumpSettings['ignore-table'] as $tableName) {
                 if (preg_match("/.+\.(.+)$/u", $tableName, $m)) {
                     $excludedTables[] = $m[1];
@@ -324,46 +330,13 @@ class DumpCommand extends Command
         return $excludedTables;
     }
 
-    protected function getDumpSettingsDefault(): array
+    protected function getValidDumpSettings(): array
     {
-        // Literal copy from \Ifsnop\Mysqldump\Mysqldump::__construct
-        return [
-                'include-tables' => [],
-                'exclude-tables' => [],
-                'compress' => Mysqldump::NONE,
-                'init_commands' => [],
-                'no-data' => [],
-                'reset-auto-increment' => false,
-                'add-drop-database' => false,
-                'add-drop-table' => false,
-                'add-drop-trigger' => true,
-                'add-locks' => true,
-                'complete-insert' => false,
-                'databases' => false,
-                'default-character-set' => Mysqldump::UTF8,
-                'disable-keys' => true,
-                'extended-insert' => true,
-                'events' => false,
-                'hex-blob' => true, /* faster than escaped content */
-                'net_buffer_length' => 0,
-                'no-autocommit' => true,
-                'no-create-info' => false,
-                'lock-tables' => true,
-                'routines' => false,
-                'single-transaction' => true,
-                'skip-triggers' => false,
-                'skip-tz-utc' => false,
-                'skip-comments' => false,
-                'skip-dump-date' => false,
-                'skip-definer' => false,
-                'where' => '',
-                /* deprecated */
-                'disable-foreign-keys-check' => true,
-            ] + [
-                'gdpr-expressions' => null,
-                'gdpr-replacements' => null,
-                'debug-sql' => false,
-            ];
+        return DumpSettings::getDefaults() + [
+            'gdpr-expressions' => null,
+            'gdpr-replacements' => null,
+            'debug-sql' => false,
+        ];
     }
 
     protected function displayEffectiveReplacements(OutputInterface $output, $dumpSettings)

@@ -2,7 +2,7 @@
 
 namespace druidfi\GdprDump;
 
-use Ifsnop\Mysqldump\Mysqldump;
+use Druidfi\Mysqldump\Mysqldump;
 use druidfi\GdprDump\ColumnTransformer\ColumnTransformer;
 
 class MysqldumpGdpr extends Mysqldump
