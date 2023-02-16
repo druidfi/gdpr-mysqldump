@@ -227,13 +227,20 @@ class DumpCommand extends Command
         // Get only settings which are found from the defaults
         $dumpSettings = array_intersect_key($dumpSettings, $this->getValidDumpSettings());
 
-        if ($input->getOption('display-effective-replacements')) {
-            // We simply display the gdpr-dump specific settings and exit.
-            $this->displayEffectiveReplacements($output, $dumpSettings);
-        } else {
-            $dumper = new MysqldumpGdpr($dsn, $user, $password, $dumpSettings, $pdoSettings);
-            $dumper->start($input->getOption('result-file'));
+        try {
+            if ($input->getOption('display-effective-replacements')) {
+                // We simply display the gdpr-dump specific settings and exit.
+                $this->displayEffectiveReplacements($output, $dumpSettings);
+            } else {
+                $dumper = new MysqldumpGdpr($dsn, $user, $password, $dumpSettings, $pdoSettings);
+                $dumper->start($input->getOption('result-file'));
+            }
+        } catch (\Exception $e) {
+            $output->writeln($e->getMessage());
+            return Command::FAILURE;
         }
+
+        return Command::SUCCESS;
     }
 
     protected function getDefaults($extraFile): array
