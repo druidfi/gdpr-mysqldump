@@ -237,10 +237,12 @@ class DumpCommand extends Command
             }
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
-            return Command::FAILURE;
+            return 1;
+            //return Command::FAILURE;
         }
 
-        return Command::SUCCESS;
+        return 0;
+        //return Command::SUCCESS;
     }
 
     protected function getDefaults($extraFile): array
