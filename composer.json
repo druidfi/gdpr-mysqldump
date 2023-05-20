@@ -5,7 +5,8 @@
   "authors": [
     {
       "name": "Druid.fi",
-      "email": "info@druid.fi"
+      "homepage": "https://github.com/druidfi",
+      "role": "Maintainer"
     },
     {
       "name": "Axel Rutz",
@@ -14,6 +15,10 @@
     {
       "name": "Bomoko",
       "email": "blaize.kaye@gmail.com"
+    },
+    {
+      "name": "Marko Korhonen",
+      "homepage": "https://github.com/back-2-95"
     }
   ],
   "require": {
