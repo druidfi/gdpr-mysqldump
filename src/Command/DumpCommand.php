@@ -87,6 +87,8 @@ class DumpCommand extends Command
                 'Enclose the INSERT statements for each dumped table within SET autocommit = 0 and COMMIT statements.')
             ->addOption('no-create-info', null, InputOption::VALUE_NONE,
                 'Do not write CREATE DATABASE statements.')
+            ->addOption('no-tablespaces', null, InputOption::VALUE_NONE,
+                'Currently ignored.')
             ->addOption('lock-tables', 'l', InputOption::VALUE_NONE,
                 'Lock all tables before dumping them.')
             ->addOption('routines', null, InputOption::VALUE_NONE,
