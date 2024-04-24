@@ -109,6 +109,8 @@ class DumpCommand extends Command
                 'Dump only rows selected by given WHERE condition.')
             ->addOption('gdpr-expressions', null, InputOption::VALUE_OPTIONAL,
                 'A json of gdpr sql-expressions keyed by table and column.')
+            ->addOption('gdpr-expressions-file', null, InputOption::VALUE_OPTIONAL,
+                'File that contains a json of gdpr sql-expressions keyed by table and column.')
             ->addOption('gdpr-replacements', null, InputOption::VALUE_OPTIONAL,
                 'A json of gdpr replacement values keyed by table and column.')
             ->addOption('gdpr-replacements-file', null, InputOption::VALUE_OPTIONAL,
@@ -190,6 +192,15 @@ class DumpCommand extends Command
                 throw new UnexpectedValueException(sprintf('Invalid gdpr-expressions json (%s): %s',
                     json_last_error_msg(), $dumpSettings['gdpr-expressions']));
             }
+        }
+
+        if (!empty($dumpSettings['gdpr-expressions-file'])) {
+          $dumpSettings['gdpr-expressions'] = json_decode(file_get_contents($dumpSettings['gdpr-expressions-file']),
+            true);
+          if (json_last_error()) {
+            throw new UnexpectedValueException(sprintf('Invalid gdpr-expressions json (%s): %s',
+              json_last_error_msg(), $dumpSettings['gdpr-expressions']));
+          }
         }
 
         if (!empty($dumpSettings['gdpr-replacements'])) {
