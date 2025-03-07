@@ -28,8 +28,8 @@
     "druidfi/mysqldump-php": "^2.0.0@rc",
     "fakerphp/faker": "^1.20",
     "matomo/ini": "^3.0",
-    "symfony/console": "^4.4.25|^5.0|^6.0|^7.0",
-    "symfony/event-dispatcher": "^4.4.25|^5.0|^6.0|^7.0"
+    "symfony/console": "^5.4|^6.4|^7.2",
+    "symfony/event-dispatcher": "^5.4|^6.4|^7.2"
   },
   "require-dev": {
     "phpunit/phpunit": "^8.5.15 || ^9"
