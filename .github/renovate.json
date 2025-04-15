@@ -1,9 +1,7 @@
 {
-  "baseBranches": [
-    "main"
-  ],
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":preserveSemverRanges",
     ":disableRateLimiting"
   ],
@@ -15,5 +13,8 @@
   "timezone": "Europe/Helsinki",
   "vulnerabilityAlerts": {
     "labels": ["security"]
-  }
+  },
+  "baseBranches": [
+    "main"
+  ]
 }
