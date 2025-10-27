@@ -160,7 +160,7 @@ class DumpCommand extends Command
         return $password;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $dumpSettings =
             $this->getOptOptions($input->getOption('opt'))
